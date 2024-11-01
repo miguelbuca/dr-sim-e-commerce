@@ -8,16 +8,27 @@ import { CartItemCreateDto, CartItemUpdateDto } from './dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { Prisma } from '@prisma/client';
 import { CartService } from 'src/cart/cart.service';
+import { ProductService } from 'src/product/product.service';
 
 @Injectable()
 export class CartItemService {
   constructor(
     private prismaService: PrismaService,
     private cartService: CartService,
+    private productService: ProductService,
   ) {}
   async create(userId: string, { productId, ...dto }: CartItemCreateDto) {
     try {
       const cart = await this.cartService.get(userId);
+
+      const product = await this.productService.get(productId);
+
+      const isAvaliableStock = product.stock - dto.quantity >= 0;
+
+      if (!isAvaliableStock)
+        throw new BadRequestException(
+          `Insufficient stock, ${product.stock} available`,
+        );
 
       return await this.prismaService.cartItem.create({
         data: {
@@ -40,12 +51,25 @@ export class CartItemService {
           throw new ForbiddenException('Credential already taken');
         }
       }
-      throw new BadRequestException('Failed to create item');
+      throw new BadRequestException(
+        error?.response?.message ?? 'Failed to create item',
+      );
     }
   }
 
   async update(userId: string, id: string, dto: CartItemUpdateDto) {
     try {
+      const cartItem = await this.get(userId, id);
+
+      const product = await this.productService.get(cartItem.productId);
+
+      const isAvaliableStock = product.stock - dto.quantity >= 0;
+
+      if (!isAvaliableStock)
+        throw new BadRequestException(
+          `Insufficient stock, ${product.stock} available`,
+        );
+
       return await this.prismaService.cartItem.update({
         data: {
           ...dto,
@@ -65,7 +89,9 @@ export class CartItemService {
           throw new NotFoundException('Item not found');
         }
       }
-      throw new BadRequestException('Failed to update item');
+      throw new BadRequestException(
+        error?.response?.message ?? 'Failed to update item',
+      );
     }
   }
 
