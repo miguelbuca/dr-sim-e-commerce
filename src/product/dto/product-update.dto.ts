@@ -1,5 +1,5 @@
 import { Product } from '@prisma/client';
-import { IsString, IsOptional, IsDecimal, IsInt, IsNumber } from 'class-validator';
+import { IsString, IsOptional, IsInt, IsNumber } from 'class-validator';
 
 export class ProductUpdateDto
   implements Omit<Product, 'id' | 'createdAt' | 'updatedAt'>
