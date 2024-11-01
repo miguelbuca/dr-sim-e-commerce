@@ -118,7 +118,7 @@ export class CartItemService {
 
       const totalItems = await this.prismaService.cartItem.count();
 
-      const CartItems = await this.prismaService.cartItem.findMany({
+      const cartItems = await this.prismaService.cartItem.findMany({
         where: {
           cart: {
             userId,
@@ -131,7 +131,7 @@ export class CartItemService {
       const totalPages = Math.ceil(totalItems / limit);
 
       return {
-        CartItems,
+        data: cartItems,
         totalItems,
         totalPages,
         currentPage: page,
