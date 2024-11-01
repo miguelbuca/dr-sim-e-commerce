@@ -95,7 +95,7 @@ export class ProductService {
       const totalPages = Math.ceil(totalItems / limit);
 
       return {
-        products,
+        data: products,
         totalItems,
         totalPages,
         currentPage: page,
