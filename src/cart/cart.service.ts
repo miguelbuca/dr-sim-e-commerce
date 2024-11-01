@@ -17,8 +17,11 @@ export class CartService {
           },
         },
         include: {
-          _count: true,
-          items: true,
+          items: {
+            include: {
+              product: true,
+            },
+          },
         },
       });
       if (!cart) {
