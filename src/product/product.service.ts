@@ -50,7 +50,7 @@ export class ProductService {
 
   async delete(id: string) {
     try {
-      return await this.prismaService.product.delete({
+      await this.prismaService.product.delete({
         where: {
           id,
         },

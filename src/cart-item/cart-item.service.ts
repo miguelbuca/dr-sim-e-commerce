@@ -71,7 +71,7 @@ export class CartItemService {
 
   async delete(userId: string, id: string) {
     try {
-      return await this.prismaService.cartItem.delete({
+      await this.prismaService.cartItem.delete({
         where: {
           id,
           AND: {
