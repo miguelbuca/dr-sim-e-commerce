@@ -20,8 +20,6 @@ export const GetUser = createParamDecorator(
   ) => {
     const request = ctx.switchToHttp().getRequest();
 
-    console.log(request.user);
-
     if (data && typeof data === 'string') {
       return request.user[data];
     }
