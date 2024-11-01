@@ -131,7 +131,7 @@ export class CartItemService {
       const totalPages = Math.ceil(totalItems / limit);
 
       return {
-        data: cartItems,
+        cart_items: cartItems,
         totalItems,
         totalPages,
         currentPage: page,
